@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Main-Class: org.springframework.boot.loader.JarLauncher
-Start-Class: com.chargecard.app.ChargeCardApiApplication
+Start-Class: com.charge.card.application.ChargeCardApiApplication
 Spring-Boot-Version: 2.7.3
 Spring-Boot-Classes: BOOT-INF/classes/
 Spring-Boot-Lib: BOOT-INF/lib/
