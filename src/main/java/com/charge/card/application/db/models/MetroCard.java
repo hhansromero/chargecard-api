@@ -1,19 +1,18 @@
 package com.charge.card.application.db.models;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Builder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class MetroCard {
     private Long id;
-    private String name;
-    private String username;
-    private String password;
+    private String number;
+    private String isActive;
 }
