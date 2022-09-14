@@ -1,16 +1,18 @@
 package com.charge.card.application.db.models;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Builder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,12 +20,16 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tb_user")
-public class User {
+@Table(name = "tb_passenger")
+public class Passenger {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String username;
-    private String password;
+    private Long Id;
+    //private User user;
+    @Column(name = "use_sms")
+    private Boolean useSMS;
+    @Column(name = "use_email")
+    private Boolean useEmail;
+    //private List<Card> cards;
+    //private MetroCard metroCard;
 }

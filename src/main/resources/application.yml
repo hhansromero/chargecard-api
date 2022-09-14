@@ -3,3 +3,16 @@ server:
 logging:
   level:
     root: info
+spring:
+  datasource:
+    url: jdbc:postgresql://chargecard-db.c6jeizv4jsny.us-west-2.rds.amazonaws.com:5432/chargecarddb
+    username: postgres
+    password: postgre$ql2022
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
