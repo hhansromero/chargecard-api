@@ -6,10 +6,13 @@ import lombok.Setter;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Getter
@@ -26,4 +29,12 @@ public class Card {
     private String number;
     private String expiration;
     private String cvv;
+    @Column(name = "current_balance")
+    private double currentBalance;
+    @Column(name = "card_holder")
+    private String cardHolder;
+
+    @ManyToOne
+    @JoinColumn(name = "passenger_id")
+    private Passenger passenger;
 }

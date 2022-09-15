@@ -31,4 +31,9 @@ public class Movement {
     private double amount;
     @Column(name = "movement_type")
     private MovementType movementType;
+
+    @Column(name = "metro_card_id")
+    private Long metroCardId;
+    @Column(name = "card_id")
+    private Long cardId;
 }
