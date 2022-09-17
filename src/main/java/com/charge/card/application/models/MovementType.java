@@ -1,4 +1,4 @@
-package com.charge.card.application.models.request;
+package com.charge.card.application.models;
 
 import java.util.Arrays;
 

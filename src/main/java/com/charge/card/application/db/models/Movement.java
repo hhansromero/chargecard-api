@@ -1,6 +1,6 @@
 package com.charge.card.application.db.models;
 
-import com.charge.card.application.models.request.MovementType;
+import com.charge.card.application.models.MovementType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
