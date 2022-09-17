@@ -23,6 +23,15 @@ public class UserService {
         this.passengerRepository = passengerRepository;
     }
 
+    public Mono<UserDTO> findUserById(Long userId) throws ChangeSetPersister.NotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+        Passenger passenger = passengerRepository.findByUserId(userId)
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+
+        return buildUserDTO(user, passenger);
+    }
+
     public Mono<UserDTO> saveUser(UserDTO userDTO) {
         User user = User.builder()
                 .username(userDTO.getUsername())
@@ -42,21 +51,7 @@ public class UserService {
 
         Passenger passengerCreated = passengerRepository.save(passenger);
 
-        return Mono.just(
-                UserDTO.builder()
-                .id(userCreated.getId())
-                .username(userCreated.getUsername())
-                .password("SECRET")
-                .passenger(PassengerDTO.builder()
-                        .id(passengerCreated.getId())
-                        .name(passengerCreated.getName())
-                        .email(passengerCreated.getEmail())
-                        .phone(passengerCreated.getPhone())
-                        .dni(passengerCreated.getDni())
-                        .useEmail(passengerCreated.getUseEmail())
-                        .useSMS(passengerCreated.getUseSMS())
-                        .build())
-                .build());
+        return buildUserDTO(userCreated, passengerCreated);
     }
 
     public Mono<UserDTO> modifyUser(UserDTO userDTO, Long userId)
@@ -78,20 +73,24 @@ public class UserService {
         passenger.setUseSMS(userDTO.getPassenger().getUseSMS());
         passengerRepository.save(passenger);
 
-        return Mono.just(
+        return buildUserDTO(user, passenger);
+    }
+
+    private Mono<UserDTO> buildUserDTO(User user, Passenger passenger) {
+        return  Mono.just(
                 UserDTO.builder()
-                    .id(user.getId())
-                    .username(user.getUsername())
-                    .password("SECRET")
-                    .passenger(PassengerDTO.builder()
-                        .id(passenger.getId())
-                        .name(passenger.getName())
-                        .email(passenger.getEmail())
-                        .phone(passenger.getPhone())
-                        .dni(passenger.getDni())
-                        .useEmail(passenger.getUseEmail())
-                        .useSMS(passenger.getUseSMS())
-                        .build())
-                .build());
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .password("SECRET")
+                        .passenger(PassengerDTO.builder()
+                                .id(passenger.getId())
+                                .name(passenger.getName())
+                                .email(passenger.getEmail())
+                                .phone(passenger.getPhone())
+                                .dni(passenger.getDni())
+                                .useEmail(passenger.getUseEmail())
+                                .useSMS(passenger.getUseSMS())
+                                .build())
+                        .build());
     }
 }
