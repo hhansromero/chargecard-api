@@ -98,6 +98,13 @@ public class UserService {
         return buildUserDTO(user, passenger, metroCard);
     }
 
+    public boolean validateLogin(String username, String password) {
+        User user = userRepository.findByUsernameAndPassword(username, password)
+                .orElse(User.builder().build());
+
+        return user.getId() != null;
+    }
+
     private Mono<UserDTO> buildUserDTO(User user, Passenger passenger, MetroCard metroCard) {
         return  Mono.just(
                 UserDTO.builder()
