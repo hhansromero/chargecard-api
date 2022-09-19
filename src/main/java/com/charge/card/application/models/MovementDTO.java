@@ -11,9 +11,11 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MetroCarDTO {
+public class MovementDTO {
     private Long id;
-    private String number;
-    private Boolean isActive;
-    private Long passengerId;
+    private String recordedAt;
+    private double amount;
+    private String movementType;
+    private MetroCardDTO metroCard;
+    private Long cardId;
 }

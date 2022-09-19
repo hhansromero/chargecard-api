@@ -11,10 +11,10 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class MetroCardDTO {
     private Long id;
-    private String username;
-    private String password;
-    private PassengerDTO passenger;
-    private MetroCardDTO metroCard;
+    private String number;
+    private Boolean isActive;
+    private double currentBalance;
+    private Long passengerId;
 }

@@ -1,6 +1,6 @@
 package com.charge.card.application.controllers;
 
-import com.charge.card.application.models.MetroCarDTO;
+import com.charge.card.application.models.MetroCardDTO;
 import com.charge.card.application.services.MetroCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +21,8 @@ public class MetroCardController {
     }
 
     @PostMapping("/metro-cards")
-    public Mono<MetroCarDTO> postMetroCard(@RequestBody MetroCarDTO metroCarDTO) {
-        return metroCardService.saveMetroCard(metroCarDTO);
+    public Mono<MetroCardDTO> postMetroCard(@RequestBody MetroCardDTO metroCardDTO) {
+        return metroCardService.saveMetroCard(metroCardDTO);
     }
 
 }

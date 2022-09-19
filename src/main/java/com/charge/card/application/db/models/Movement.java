@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +32,7 @@ public class Movement {
     private LocalDateTime recordedAt;
     private double amount;
     @Column(name = "movement_type")
+    @Enumerated(EnumType.STRING)
     private MovementType movementType;
 
     @Column(name = "metro_card_id")
