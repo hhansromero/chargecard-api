@@ -17,5 +17,5 @@ public class MovementDTO {
     private double amount;
     private String movementType;
     private MetroCardDTO metroCard;
-    private Long cardId;
+    private CardDTO card;
 }

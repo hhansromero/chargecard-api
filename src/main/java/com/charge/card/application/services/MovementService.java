@@ -1,9 +1,12 @@
 package com.charge.card.application.services;
 
+import com.charge.card.application.db.models.Card;
 import com.charge.card.application.db.models.MetroCard;
 import com.charge.card.application.db.models.Movement;
+import com.charge.card.application.db.repositories.CardRepository;
 import com.charge.card.application.db.repositories.MetroCardRepository;
 import com.charge.card.application.db.repositories.MovementRepository;
+import com.charge.card.application.models.CardDTO;
 import com.charge.card.application.models.MetroCardDTO;
 import com.charge.card.application.models.MovementDTO;
 import com.charge.card.application.models.MovementType;
@@ -22,11 +25,14 @@ public class MovementService {
 
     private final MovementRepository movementRepository;
     private final MetroCardRepository metroCardRepository;
+    private final CardRepository cardRepository;
 
     @Autowired
-    public MovementService(MovementRepository movementRepository, MetroCardRepository metroCardRepository) {
+    public MovementService(MovementRepository movementRepository, MetroCardRepository metroCardRepository,
+                           CardRepository cardRepository) {
         this.movementRepository = movementRepository;
         this.metroCardRepository = metroCardRepository;
+        this.cardRepository = cardRepository;
     }
 
     public Mono<MovementDTO> saveMovement(MovementDTO movementDTO) {
@@ -35,11 +41,11 @@ public class MovementService {
                 .orElseThrow();
 
         Movement movement = Movement.builder()
-                .recordedAt(buildLocalDateTime(movementDTO.getRecordedAt()))
+                .recordedAt(LocalDateTime.now())
                 .amount(movementDTO.getAmount())
                 .movementType(MovementType.getMovementType(movementDTO.getMovementType()))
                 .metroCardId(movementDTO.getMetroCard().getId())
-                .cardId(movementDTO.getCardId())
+                .cardId(movementDTO.getCard().getId())
                 .build();
 
         movementRepository.save(movement);
@@ -64,7 +70,9 @@ public class MovementService {
                                 .currentBalance(metroCard.getCurrentBalance())
                                 .passengerId(metroCard.getPassenger().getId())
                                 .build())
-                        .cardId(movement.getCardId())
+                        .card(CardDTO.builder()
+                                .id(movement.getCardId())
+                                .build())
                         .build());
     }
 
@@ -77,7 +85,9 @@ public class MovementService {
                         .recordedAt(m.getRecordedAt().toString())
                         .amount(m.getAmount())
                         .movementType(m.getMovementType().getValue())
-                        .cardId(m.getCardId())
+                        .card(
+                                buildCardDTOFromCardId(m.getCardId())
+                        )
                         .metroCard(MetroCardDTO.builder()
                                 .id(metroCard.getId())
                                 .number(metroCard.getNumber())
@@ -88,6 +98,19 @@ public class MovementService {
                         .build())
                 .collect(Collectors.toList());
         return Flux.fromStream(movements.stream());
+    }
+
+    private CardDTO buildCardDTOFromCardId(Long cardId) {
+        Card card = cardRepository.findById(cardId).orElseThrow();
+        return CardDTO.builder()
+                .id(card.getId())
+                .number(card.getNumber())
+                .expiration(card.getExpiration())
+                .cvv(card.getCvv())
+                .cardHolder(card.getCardHolder())
+                .currentBalance(card.getCurrentBalance())
+                .passengerId(card.getPassenger().getId())
+                .build();
     }
 
     private LocalDateTime buildLocalDateTime(String dateTimeStr) {

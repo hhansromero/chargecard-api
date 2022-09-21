@@ -4,7 +4,7 @@ import com.charge.card.application.db.models.Card;
 import com.charge.card.application.db.models.Passenger;
 import com.charge.card.application.db.repositories.CardRepository;
 import com.charge.card.application.db.repositories.PassengerRepository;
-import com.charge.card.application.models.CarDTO;
+import com.charge.card.application.models.CardDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -25,14 +25,14 @@ public class CardService {
         this.passengerRepository = passengerRepository;
     }
 
-    public Mono<CarDTO> saveCard(CarDTO carDTO) {
-        Passenger passenger = passengerRepository.findById(carDTO.getPassengerId()).orElseThrow();
+    public Mono<CardDTO> saveCard(CardDTO cardDTO) {
+        Passenger passenger = passengerRepository.findById(cardDTO.getPassengerId()).orElseThrow();
 
         Card card = Card.builder()
-                .number(carDTO.getNumber())
-                .expiration(carDTO.getExpiration())
-                .cvv(carDTO.getCvv())
-                .cardHolder(carDTO.getCardHolder())
+                .number(cardDTO.getNumber())
+                .expiration(cardDTO.getExpiration())
+                .cvv(cardDTO.getCvv())
+                .cardHolder(cardDTO.getCardHolder())
                 .passenger(passenger)
                 .currentBalance(200.00) // amount by default
                 .build();
@@ -40,7 +40,7 @@ public class CardService {
         cardRepository.save(card);
 
         return Mono.just(
-                CarDTO.builder()
+                CardDTO.builder()
                     .id(card.getId())
                     .number(card.getNumber())
                     .expiration(card.getExpiration())
@@ -50,11 +50,11 @@ public class CardService {
                 .build());
     }
 
-    public Flux<CarDTO> findCardsByPassengerId(Long passengerId) {
+    public Flux<CardDTO> findCardsByPassengerId(Long passengerId) {
         Passenger passenger = passengerRepository.findById(passengerId).orElseThrow();
 
-        List<CarDTO> cards = cardRepository.findByPassenger(passenger)
-                .stream().map(c -> CarDTO.builder()
+        List<CardDTO> cards = cardRepository.findByPassenger(passenger)
+                .stream().map(c -> CardDTO.builder()
                         .id(c.getId())
                         .number(c.getNumber())
                         .expiration(c.getExpiration())

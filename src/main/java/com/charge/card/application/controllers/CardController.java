@@ -1,6 +1,6 @@
 package com.charge.card.application.controllers;
 
-import com.charge.card.application.models.CarDTO;
+import com.charge.card.application.models.CardDTO;
 import com.charge.card.application.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,12 +27,12 @@ public class CardController {
     }
 
     @PostMapping("/cards")
-    public Mono<CarDTO> postCard(@RequestBody CarDTO carDTO) {
-        return cardService.saveCard(carDTO);
+    public Mono<CardDTO> postCard(@RequestBody CardDTO cardDTO) {
+        return cardService.saveCard(cardDTO);
     }
 
     @GetMapping("/cards/by-passenger/{passengerId}")
-    public Flux<CarDTO> getCardsByPassengerId(@PathVariable Long passengerId) {
+    public Flux<CardDTO> getCardsByPassengerId(@PathVariable Long passengerId) {
         return cardService.findCardsByPassengerId(passengerId);
     }
 

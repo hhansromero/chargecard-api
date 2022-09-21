@@ -11,11 +11,12 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarDTO {
+public class CardDTO {
     private Long id;
     private String number;
     private String expiration;
     private String cvv;
     private String cardHolder;
+    private double currentBalance;
     private Long passengerId;
 }
