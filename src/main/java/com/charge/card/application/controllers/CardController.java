@@ -2,6 +2,8 @@ package com.charge.card.application.controllers;
 
 import com.charge.card.application.models.CardDTO;
 import com.charge.card.application.services.CardService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,8 @@ import reactor.core.publisher.Mono;
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST})
 public class CardController {
 
+    Logger logger = LoggerFactory.getLogger(CardController.class);
+
     private final CardService cardService;
 
     @Autowired
@@ -28,11 +32,13 @@ public class CardController {
 
     @PostMapping("/cards")
     public Mono<CardDTO> postCard(@RequestBody CardDTO cardDTO) {
+        logger.info("Received payload: {}.", cardDTO);
         return cardService.saveCard(cardDTO);
     }
 
     @GetMapping("/cards/by-passenger/{passengerId}")
     public Flux<CardDTO> getCardsByPassengerId(@PathVariable Long passengerId) {
+        logger.info("Received param - passengerId: {}.", passengerId);
         return cardService.findCardsByPassengerId(passengerId);
     }
 
