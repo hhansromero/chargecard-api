@@ -37,7 +37,7 @@ public class UserService {
         MetroCard metroCard = metroCardRepository.findByPassenger(passenger)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
-        return buildUserDTO(user, passenger, metroCard);
+        return buildMonoUserDTO(user, passenger, metroCard);
     }
 
     public Mono<UserDTO> saveUser(UserDTO userDTO) {
@@ -66,7 +66,7 @@ public class UserService {
                 .build();
         metroCardRepository.save(metroCard);
 
-        return buildUserDTO(user, passenger, metroCard);
+        return buildMonoUserDTO(user, passenger, metroCard);
     }
 
     public Mono<UserDTO> modifyUser(UserDTO userDTO, Long userId) throws ChangeSetPersister.NotFoundException {
@@ -95,38 +95,45 @@ public class UserService {
         metroCard.setPassenger(passenger);
         metroCardRepository.save(metroCard);
 
-        return buildUserDTO(user, passenger, metroCard);
+        return buildMonoUserDTO(user, passenger, metroCard);
     }
 
-    public boolean validateLogin(String username, String password) {
+    public UserDTO loginUser(String username, String password) throws ChangeSetPersister.NotFoundException {
         User user = userRepository.findByUsernameAndPassword(username, password)
-                .orElse(User.builder().build());
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+        Passenger passenger = passengerRepository.findByUserId(user.getId())
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+        MetroCard metroCard = metroCardRepository.findByPassenger(passenger)
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
-        return user.getId() != null;
+        return getUserDTO(user, passenger, metroCard);
     }
 
-    private Mono<UserDTO> buildUserDTO(User user, Passenger passenger, MetroCard metroCard) {
-        return  Mono.just(
-                UserDTO.builder()
-                        .id(user.getId())
-                        .username(user.getUsername())
-                        .password(user.getPassword())
-                        .passenger(PassengerDTO.builder()
-                                .id(passenger.getId())
-                                .name(passenger.getName())
-                                .email(passenger.getEmail())
-                                .phone(passenger.getPhone())
-                                .dni(passenger.getDni())
-                                .useEmail(passenger.getUseEmail())
-                                .useSMS(passenger.getUseSMS())
-                                .build())
-                        .metroCard(MetroCardDTO.builder()
-                                .id(metroCard.getId())
-                                .number(metroCard.getNumber())
-                                .isActive(metroCard.getIsActive())
-                                .currentBalance(metroCard.getCurrentBalance())
-                                .passengerId(metroCard.getPassenger().getId())
-                                .build())
-                        .build());
+    private Mono<UserDTO> buildMonoUserDTO(User user, Passenger passenger, MetroCard metroCard) {
+        return  Mono.just(getUserDTO(user, passenger, metroCard));
+    }
+
+    private UserDTO getUserDTO(User user, Passenger passenger, MetroCard metroCard) {
+        return UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .passenger(PassengerDTO.builder()
+                        .id(passenger.getId())
+                        .name(passenger.getName())
+                        .email(passenger.getEmail())
+                        .phone(passenger.getPhone())
+                        .dni(passenger.getDni())
+                        .useEmail(passenger.getUseEmail())
+                        .useSMS(passenger.getUseSMS())
+                        .build())
+                .metroCard(MetroCardDTO.builder()
+                        .id(metroCard.getId())
+                        .number(metroCard.getNumber())
+                        .isActive(metroCard.getIsActive())
+                        .currentBalance(metroCard.getCurrentBalance())
+                        .passengerId(metroCard.getPassenger().getId())
+                        .build())
+                .build();
     }
 }

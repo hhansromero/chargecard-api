@@ -24,9 +24,12 @@ public class LoginController {
     }
 
     @PostMapping("/users/login")
-    public ResponseEntity<?> validateLogin(@RequestBody UserDTO userRequest) {
-        if (!userService.validateLogin(userRequest.getUsername(), userRequest.getPassword()))
+    public ResponseEntity<UserDTO> validateLogin(@RequestBody UserDTO userRequest) {
+        try {
+            return ResponseEntity.ok(
+                    userService.loginUser(userRequest.getUsername(), userRequest.getPassword()));
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok().build();
+        }
     }
 }
