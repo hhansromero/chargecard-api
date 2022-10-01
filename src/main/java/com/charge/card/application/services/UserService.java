@@ -98,17 +98,6 @@ public class UserService {
         return buildMonoUserDTO(user, passenger, metroCard);
     }
 
-    public UserDTO loginUser(String username, String password) throws ChangeSetPersister.NotFoundException {
-        User user = userRepository.findByUsernameAndPassword(username, password)
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
-        Passenger passenger = passengerRepository.findByUserId(user.getId())
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
-        MetroCard metroCard = metroCardRepository.findByPassenger(passenger)
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
-
-        return getUserDTO(user, passenger, metroCard);
-    }
-
     private Mono<UserDTO> buildMonoUserDTO(User user, Passenger passenger, MetroCard metroCard) {
         return  Mono.just(getUserDTO(user, passenger, metroCard));
     }
