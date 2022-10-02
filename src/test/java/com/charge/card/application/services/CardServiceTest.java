@@ -29,7 +29,7 @@ public class CardServiceTest {
     CardService cardService;
 
     @Test
-    void testCreateCard() {
+    void testSaveCard() {
         CardDTO cardDTO = CardDTO.builder()
                 .number("454590901212")
                 .expiration("09/25")
@@ -51,12 +51,12 @@ public class CardServiceTest {
         when(passengerRepository.findById(cardDTO.getPassengerId()))
                 .thenReturn(Optional.of(passenger));
 
-        CardDTO cardResponse = cardService.saveCard(cardDTO).block();
+        CardDTO cardDTOResponse = cardService.saveCard(cardDTO).block();
 
-        Assertions.assertEquals(cardDTO.getNumber(), cardResponse.getNumber());
-        Assertions.assertEquals(cardDTO.getExpiration(), cardResponse.getExpiration());
-        Assertions.assertEquals(cardDTO.getCvv(), cardResponse.getCvv());
-        Assertions.assertEquals(cardDTO.getCardHolder(), cardResponse.getCardHolder());
+        Assertions.assertEquals(cardDTO.getNumber(), cardDTOResponse.getNumber());
+        Assertions.assertEquals(cardDTO.getExpiration(), cardDTOResponse.getExpiration());
+        Assertions.assertEquals(cardDTO.getCvv(), cardDTOResponse.getCvv());
+        Assertions.assertEquals(cardDTO.getCardHolder(), cardDTOResponse.getCardHolder());
     }
 
     @Test

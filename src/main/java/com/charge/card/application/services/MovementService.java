@@ -16,7 +16,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -111,12 +110,6 @@ public class MovementService {
                 .currentBalance(card.getCurrentBalance())
                 .passengerId(card.getPassenger().getId())
                 .build();
-    }
-
-    private LocalDateTime buildLocalDateTime(String dateTimeStr) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, formatter);
-        return dateTime;
     }
 
 }
