@@ -39,14 +39,19 @@ public class UserController {
             return userService.findUserById(userId);
         } catch (ChangeSetPersister.NotFoundException e) {
             logger.error("An exception occurred, e: {}.", e);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario.", e);
         }
     }
 
     @PostMapping("/users")
     public Mono<UserDTO> postUser(@RequestBody UserDTO userDTO) {
-        logger.info("Received payload: {}.", userDTO);
-        return userService.saveUser(userDTO);
+        try {
+            logger.info("Received payload: {}.", userDTO.toString());
+            return userService.saveUser(userDTO);
+        } catch (Exception e) {
+            logger.error("An exception occurred, e: {}.", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ocurrió un error creando el usuario.", e);
+        }
     }
 
     @PutMapping("/users/{userId}")
@@ -56,7 +61,7 @@ public class UserController {
             return userService.modifyUser(userDTO, userId);
         } catch (ChangeSetPersister.NotFoundException e) {
             logger.error("An exception occurred, e: {}.", e);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el usuario.", e);
         }
     }
 }
